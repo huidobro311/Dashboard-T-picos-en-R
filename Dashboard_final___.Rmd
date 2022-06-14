@@ -1,0 +1,703 @@
+---
+title: "."
+output: 
+  flexdashboard::flex_dashboard:
+    theme:
+      version: 4
+      bg: "#36D8D6"
+      fg: "#1E302F" 
+      primary: "#2980B9  "
+      navbar-bg: "#2980B9 "
+      base_font: 
+        google: Prompt
+      heading_font:
+        google: Sen
+      code_font:
+      
+        google: 
+        
+          family: JetBrains Mono
+          local: false  
+    orientation: rows
+    social: menu
+    source_code: embed 
+    vertical_layout: fill
+
+---
+
+
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(WDI)
+library(readr)
+library(dplyr)
+library(janitor)
+library(skimr)
+library(kableExtra)
+library(ggplot2)
+library(ggthemes)
+library(RColorBrewer)
+library(ggfittext)
+library(treemapify)
+options(scipen=999)
+library(treemapify)
+library(waffle)
+library(forcats)
+library(ggalt)
+library(plotly)
+library(forcats)
+library(DT)
+library(gganimate)
+library(plotly)
+library(chilemapas)
+library(maps)
+library(tmap)
+library(sf)
+library(viridis)
+library(leaflet)
+library(geojsonio)
+
+
+
+
+notas2017 <- read_delim("datos/notas2017.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+notas2018 <- read_delim("datos/notas2018.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+notas2019 <- read_delim("datos/notas2019.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+notas2020 <- read_delim("datos/notas2020.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+notas2021 <- read_delim("datos/notas2021.csv", 
+    delim = ";", escape_double = FALSE, trim_ws = TRUE)
+
+
+
+
+notas2017_2 = notas2017 %>% rename(Año = "agno",Region = "cod_reg_rbd",   Colegio = "cod_depe", Ruralidad = "rural_rbd", Genero = "gen_alu",MediaHC = "cod_ense", Curso ="cod_grado", Promedio = "prom_gral", Asistencia = "asistencia", Sfinal = "sit_fin") %>% ungroup() %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal)
+
+notas2017_3 = notas2017_2  %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal) %>% filter(MediaHC == "310") %>% ungroup() %>% filter(Curso == "4") %>% ungroup() %>% filter(Promedio != "0") %>% ungroup() %>% filter( Asistencia != "NA")
+
+notas2018_2 = notas2018 %>% rename(Año = "AGNO",Region = "COD_REG_RBD",   Colegio = "COD_DEPE", Ruralidad = "RURAL_RBD", Genero = "GEN_ALU",MediaHC = "COD_ENSE", Curso ="COD_GRADO", Promedio = "PROM_GRAL", Asistencia = "ASISTENCIA", Sfinal = "SIT_FIN") %>% ungroup() %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal)
+
+notas2018_3 = notas2018_2  %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal) %>% filter(MediaHC == "310") %>% ungroup() %>% filter(Curso == "4") %>% ungroup() %>% filter(Promedio != "0") %>% ungroup() %>% filter( Asistencia != "NA")
+
+notas2019_2 = notas2019 %>% rename(Año = "AGNO",Region = "COD_REG_RBD",   Colegio = "COD_DEPE", Ruralidad = "RURAL_RBD", Genero = "GEN_ALU",MediaHC = "COD_ENSE", Curso ="COD_GRADO", Promedio = "PROM_GRAL", Asistencia = "ASISTENCIA", Sfinal = "SIT_FIN") %>% ungroup() %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal)
+
+notas2019_3 = notas2019_2  %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal) %>% filter(MediaHC == "310") %>% ungroup() %>% filter(Curso == "4") %>% ungroup() %>% filter(Promedio != "0") %>% ungroup() %>% filter( Asistencia != "NA")
+
+notas2020_2 = notas2020 %>% rename(Año = "AGNO",Region = "COD_REG_RBD",   Colegio = "COD_DEPE", Ruralidad = "RURAL_RBD", Genero = "GEN_ALU",MediaHC = "COD_ENSE", Curso ="COD_GRADO", Promedio = "PROM_GRAL", Asistencia = "ASISTENCIA", Sfinal = "SIT_FIN") %>% ungroup() %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal)
+
+notas2020_3 = notas2020_2  %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal) %>% filter(MediaHC == "310") %>% ungroup() %>% filter(Curso == "4") %>% ungroup() %>% filter(Promedio != "0") %>% ungroup() %>% filter( Asistencia != "NA")
+
+notas2021_2 = notas2021 %>% rename(Año = "AGNO",Region = "COD_REG_RBD",   Colegio = "COD_DEPE", Ruralidad = "RURAL_RBD", Genero = "GEN_ALU",MediaHC = "COD_ENSE", Curso ="COD_GRADO", Promedio = "PROM_GRAL", Asistencia = "ASISTENCIA", Sfinal = "SIT_FIN") %>% ungroup() %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal)
+
+notas2021_3 = notas2021_2  %>% select(Año, Region, Colegio, Ruralidad, Genero, MediaHC, Curso, Promedio, Asistencia, Sfinal) %>% filter(MediaHC == "310") %>% ungroup() %>% filter(Curso == "4") %>% ungroup() %>% filter(Promedio != "0") %>% ungroup() %>% filter( Asistencia != "NA")
+
+database = rbind(notas2017_3, notas2018_3, notas2019_3, notas2020_3,notas2021_3)
+database1 = database
+
+
+database$Promedio[database$Promedio %in% c("1")] <- "10"
+database$Promedio[database$Promedio %in% c("2")] <- "20"
+database$Promedio[database$Promedio %in% c("3")] <- "30"
+database$Promedio[database$Promedio %in% c("4")] <- "40"
+database$Promedio[database$Promedio %in% c("5")] <- "50"
+database$Promedio[database$Promedio %in% c("6")] <- "60"
+database$Promedio[database$Promedio %in% c("7")] <- "70"
+
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("1")] <- "10"
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("2")] <- "20"
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("3")] <- "30"
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("4")] <- "40"
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("5")] <- "50"
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("6")] <- "60"
+notas2017_3$Promedio[notas2017_3$Promedio %in% c("7")] <- "70"
+
+
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("1")] <- "10"
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("2")] <- "20"
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("3")] <- "30"
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("4")] <- "40"
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("5")] <- "50"
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("6")] <- "60"
+notas2018_3$Promedio[notas2018_3$Promedio %in% c("7")] <- "70"
+
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("1")] <- "10"
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("2")] <- "20"
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("3")] <- "30"
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("4")] <- "40"
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("5")] <- "50"
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("6")] <- "60"
+notas2019_3$Promedio[notas2019_3$Promedio %in% c("7")] <- "70"
+
+
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("1")] <- "10"
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("2")] <- "20"
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("3")] <- "30"
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("4")] <- "40"
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("5")] <- "50"
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("6")] <- "60"
+notas2020_3$Promedio[notas2020_3$Promedio %in% c("7")] <- "70"
+
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("1")] <- "10"
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("2")] <- "20"
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("3")] <- "30"
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("4")] <- "40"
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("5")] <- "50"
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("6")] <- "60"
+notas2021_3$Promedio[notas2021_3$Promedio %in% c("7")] <- "70"
+
+
+
+notas2017_3$Promedio = as.numeric(notas2017_3$Promedio)
+notas2018_3$Promedio = as.numeric(notas2018_3$Promedio)
+notas2019_3$Promedio = as.numeric(notas2019_3$Promedio)
+notas2020_3$Promedio = as.numeric(notas2020_3$Promedio)
+notas2021_3$Promedio = as.numeric(notas2021_3$Promedio)
+
+mean(notas2017_3$Promedio)
+mean(notas2018_3$Promedio)
+mean(notas2019_3$Promedio)
+mean(notas2020_3$Promedio)
+mean(notas2021_3$Promedio)
+
+sd(notas2017_3$Promedio)
+sd(notas2018_3$Promedio)
+sd(notas2019_3$Promedio)
+sd(notas2020_3$Promedio)
+sd(notas2021_3$Promedio)
+
+year <- c("2017", "2018", "2019", "2020", "2021")
+
+Promedios <- c(mean(notas2017_3$Promedio),
+mean(notas2018_3$Promedio),mean(notas2019_3$Promedio),mean(notas2020_3$Promedio),mean(notas2021_3$Promedio))
+
+Promedios = as.data.frame(Promedios)
+year= as.data.frame(year)
+
+
+Z = cbind(year, Promedios)
+
+database$Promedio = as.numeric(database$Promedio)
+
+notas2019_4 =notas2019_3
+
+
+
+
+
+```
+ 
+```{r}
+
+REGIONES <- mapa_comunas %>% 
+  generar_regiones() 
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("01")] <- "1"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("02")] <- "2"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("03")] <- "3"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("04")] <- "4"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("05")] <- "5"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("06")] <- "6"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("07")] <- "7"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("08")] <- "8"
+REGIONES$codigo_region[REGIONES$codigo_region %in% c("09")] <- "9"
+
+REGIONES$codigo_region = as.numeric(REGIONES$codigo_region)
+```
+
+
+```{r}
+MAP19 <- database %>% filter(Año==2019)
+MAP20 <- database %>% filter(Año==2020)
+
+
+MAP19_ <-aggregate(Asistencia~Region, MAP19, mean, na.rm=TRUE) %>% rename(As_19="Asistencia")
+MAP20_ <-aggregate(Asistencia~Region, MAP20, mean, na.rm=TRUE) %>% rename(As_20="Asistencia")
+
+MAP <- MAP19_ %>% 
+  left_join(MAP20_, by = c("Region"="Region"))
+
+MAP$VAR = MAP$As_20 - MAP$As_19
+
+MAP_ <- MAP %>% select(Region, VAR)
+
+MAP_ <- REGIONES %>% 
+  left_join(MAP_, by = c("codigo_region"="Region"))
+
+
+
+MAP19_p <-aggregate(Promedio~Region, MAP19, mean, na.rm=TRUE) %>% rename(Pr_19="Promedio")
+MAP20_p <-aggregate(Promedio~Region, MAP20, mean, na.rm=TRUE) %>% rename(Pr_20="Promedio")
+
+MAPp <- MAP19_p %>% 
+  left_join(MAP20_p, by = c("Region"="Region"))
+
+MAPp$VAR1 = MAPp$Pr_20 - MAPp$Pr_19
+
+MAP_p <- MAPp %>% select(Region, VAR1)
+
+MAP_p <- REGIONES %>% 
+  left_join(MAP_p, by = c("codigo_region"="Region"))
+
+paleta <- c("#628ca5", "#dca761")
+
+
+```
+ 
+ 
+ 
+ 
+
+```{r}
+T_Col18A <- database %>% filter(Año==2018) %>% group_by(Colegio) %>% summarise(Asistencia_18=mean(Asistencia))
+T_Col19A <- database %>% filter(Año==2019) %>% group_by(Colegio) %>% summarise(Asistencia_19=mean(Asistencia)) %>%
+  rename(c2="Colegio")
+T_Col20A <- database %>% filter(Año==2020) %>% group_by(Colegio) %>% summarise(Asistencia_20=mean(Asistencia)) %>%
+  rename(c3="Colegio")
+T_Col21A <- database %>% filter(Año==2021) %>% group_by(Colegio) %>% summarise(Asistencia_21=mean(Asistencia))%>%
+  rename(c4="Colegio")
+
+T_Col_A <- cbind(T_Col18A, T_Col19A, T_Col20A, T_Col21A)
+T_Col_A <- T_Col_A %>% select(Colegio, Asistencia_18, Asistencia_19, Asistencia_20, Asistencia_21)
+
+
+T_Col18P <- database %>% filter(Año==2018) %>% group_by(Colegio) %>% summarise(Promedios_18=mean(Promedio)) %>%
+  rename(c1="Colegio")
+T_Col19P <- database %>% filter(Año==2019) %>% group_by(Colegio) %>% summarise(Promedios_19=mean(Promedio)) %>%
+  rename(c2="Colegio")
+T_Col20P <- database %>% filter(Año==2020) %>% group_by(Colegio) %>% summarise(Promedios_20=mean(Promedio)) %>%
+  rename(c3="Colegio")
+T_Col21P <- database %>% filter(Año==2021) %>% group_by(Colegio) %>% summarise(Promedios_21=mean(Promedio))%>%
+  rename(c4="Colegio")
+
+T_Col_P <- cbind(T_Col18P, T_Col19P, T_Col20P, T_Col21P)
+
+
+
+
+T_Col18 <- database %>% filter(Año==2018) %>% group_by(Colegio) %>% summarise(Promedios_18=mean(Promedio))
+T_Col19 <- database %>% filter(Año==2019) %>% group_by(Colegio) %>% summarise(Promedios_19=mean(Promedio)) %>% rename(c1="Colegio")
+T_Col20 <- database %>% filter(Año==2020) %>% group_by(Colegio) %>% summarise(Promedios_20=mean(Promedio)) %>% rename(c2="Colegio")
+T_Col21 <- database %>% filter(Año==2021) %>% group_by(Colegio) %>% summarise(Promedios_21=mean(Promedio))%>% rename(c3="Colegio")
+
+T_Col_ <- cbind(T_Col18, T_Col19, T_Col20, T_Col21)
+T_Col_ <- T_Col_ %>% select(Colegio, Promedios_18, Promedios_19, Promedios_20, Promedios_21)
+
+colnames(T_Col_) = c("Establecimiento", "Promedio 2018", "Promedio 2019", "Promedio 2020", "Promedio 2021")
+
+T_Col_$Establecimiento[T_Col_$Establecimiento %in% c("1")] <- "Corporación Municipal"
+T_Col_$Establecimiento[T_Col_$Establecimiento %in% c("2")] <- " Municipal DAEM"
+T_Col_$Establecimiento[T_Col_$Establecimiento %in% c("3")] <- "Particular Subvencionado "
+T_Col_$Establecimiento[T_Col_$Establecimiento %in% c("4")] <- "Particular Pagado"
+T_Col_$Establecimiento[T_Col_$Establecimiento %in% c("6")] <- "Servicio Local de Educación"
+
+colnames(T_Col_A) = c("Establecimiento", "Asistencia 2018", "Asistencia 2019", "Asistencia 2020", "Asistencia 2021")
+
+T_Col_A$Establecimiento[T_Col_A$Establecimiento %in% c("1")] <- "Corporación Municipal"
+T_Col_A$Establecimiento[T_Col_A$Establecimiento %in% c("2")] <- " Municipal DAEM"
+T_Col_A$Establecimiento[T_Col_A$Establecimiento %in% c("3")] <- "Particular Subvencionado "
+T_Col_A$Establecimiento[T_Col_A$Establecimiento %in% c("4")] <- "Particular Pagado"
+T_Col_A$Establecimiento[T_Col_A$Establecimiento %in% c("6")] <- "Servicio Local de Educación"
+T_Col_1 <- T_Col_ %>% kbl(booktabs = T, digits = 0, linesep ="") %>%
+kable_styling(font_size = 10, latex_options = c("striped", "hold_position"))
+
+
+T_Col_2 <- T_Col_A %>% kbl(booktabs = T, digits = 0, linesep ="") %>%
+kable_styling(font_size = 10, latex_options = c("striped", "hold_position"))
+
+```
+
+Presentación
+==========
+
+Row
+----------
+### Introducción
+La pandemia de Covid-19 ha sido sin lugar a dudas el evento de mayor repercusión a nivel global que ha habido en los últimos años. Una de las áreas más afectadas por este evento ha sido la educación, pues se vio obligada a cambiar el sistema de enseñanza empleado hasta ese momento, siendo el cambio más grande el de pasar de tener clases presenciales a clases virtuales de un instante a otro. 
+Por este motivo, en este trabajo buscaremos encontrar cómo fué afectado el rendimiento académico de los estudiantes de cuarto medio en los primeros dos años de pandemia (2020 y 2021). Para lograr este objetivo utilizaremos las bases de datos de rendimiento escolar del Ministerio de Educacación de Chile. Es preciso comentar que los análisis serán efectuados solamente para los alumnos de cuarto medio los cuales creemos que corresponden a un grupo interesante de estudiar debido a su pronta entrada a la educación superior. 
+
+
+
+Esquema  {data-navmenu="Indicadores de Rendimiento Escolar"}
+=======
+Row
+------
+### Hipótesis: Efecto de la Pandemia en el rendimiento
+Nuestra hipótesis plantea que los indicadores de rendimiento académico que se usan habitualmente tales como el promedio de notas, la asistencia a clases y la aprobación del curso, no empeoraron realmente con la pandemia e incluso pudieron haber aumentado.
+Sin embargo, creemos que esta evolución de los indicadores de rendimiento académico no representa la evolución real u objetiva del aprendizaje de los jóvenes, sino un resultado sesgado por la situación sanitaria, como por ejemplo a través de  pruebas de menor dificultad o hechas con apuntes.  
+
+
+
+
+### Interpretación del gráfico
+
+Podemos ver en el gráfico de promedios que efectivamente en los años de pandemia (2020 y 2021) se ve un aumento significable en las notas de los alumnos de cuarto medio. Puntualmente lo que observamos es que entre 2017 y 2019 las notas venian presentando un crecimiento constante pero leve que crece abruptamente en 2020. En 2021 las notas bajan en relacion a 2020 pero aun asi mantienen un crecimiento importante con respecto a los años anteriores.
+
+
+Row
+-------
+### Evolución de la media de los promedios generales (2017-2021)
+
+
+```{r}
+
+plot(Z$year, Z$Promedios, type = "o", cex= 2.5 ,xlab="Año",ylab="Promedio General ", main="Evolución de los Promedios Generales entre 2017-2020",  col = Z$year, pch = 20)
+
+
+
+
+
+
+
+```
+Row {data-height=600}
+--------
+
+
+```{r}
+ 
+
+```
+
+
+
+### Esquema general
+
+A partir de estos resultados, en este dashboard se analizará las distorsiones que la pandemia pudo haber provocado en los principales indicadores de rendimiento de los alumnos. Para eso presentamos: un análisis de distribución de los promedios generales  y de los porcentajes de asistencia  entre 2017 y 2021; tablas para desagregar los indicadores por tipo de establecimiento; mapa de indicadores por region ; por último se presenta una conclusión. 
+
+
+Promedios Generales {data-navmenu="Indicadores de Rendimiento Escolar"}
+============
+Row 
+----------
+
+### Distribución de los Promedios Generales
+
+En el siguiente apartado se analizará la diferencia entre las distribuciones de los promedios generales de los alumnos para cada año. Lo esperable para un año y grupo de alumnos común, es que la distribución de promedios siga una forma similar a una campana de Gauss. Esto quiere decir, que es esperable que en un año normal, existan muchos alumnos en torno al promedio del curso, y menos en los resultados mas extremos (mejores y peores promedios)
+
+
+Row {.tabset data-height=600}
+--------------------
+
+### Promedios Generales 2017
+
+
+```{r}
+database %>% filter(Año == 2017) %>%
+  plot_ly(x = ~Promedio) %>%
+  add_histogram(nbinsx = 30, color = I("#3fa3ab")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Promedio General",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+```
+
+
+### Promedios Generales 2018
+
+```{r}
+database %>% filter(Año == 2018) %>%
+  plot_ly(x = ~Promedio) %>%
+  add_histogram(nbinsx = 30, color = I("#3fa3ab")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Promedio General",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+ 
+
+```
+
+
+### Promedios Generales 2019
+
+
+```{r}
+database %>% filter(Año == 2019) %>%
+  plot_ly(x = ~Promedio) %>%
+  add_histogram(nbinsx = 30, color = I("#3fa3ab")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Promedio General",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+```
+
+
+### Promedios Generales 2020
+
+
+```{r}
+database %>% filter(Año == 2020) %>%
+  plot_ly(x = ~Promedio) %>%
+  add_histogram(nbinsx = 30, color = I("#3fa3ab")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Promedio General",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+
+```
+
+### Promedios Generales 2021
+
+
+```{r}
+
+database %>% filter(Año == 2021) %>%
+  plot_ly(x = ~Promedio) %>%
+  add_histogram(nbinsx = 30, color = I("#3fa3ab")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Promedio General",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+
+```
+
+
+Row {data-height=300}
+------
+### Interpretación de la distribución
+
+ Como podemos observar, los promedios generales se distribuyen normal de forma bastante clara en 2018 y 2019. En 2020 y 2021 en tanto, podemos ver que la concentración de notas se carga hacia la derecha, habiendo entonces más alumnos con mejores notas.
+    
+   De estos resultados, es difícil interpretar que la pandemia tuvo efectos negativos sobre la educación, dehecho es posible evidenciar que los promedios generales de estos alumnos aumentaron. Sin embargo, esta alza creemos que es dificultosa de atribuir a un mejor sistema educativo, sino más bien a ciertas dificultades de los colegios para adaptarse a la pandemia, lo que llevo a una mejora sistemática de los promedios generales.
+
+
+
+Asistencia {data-navmenu="Indicadores de Rendimiento Escolar"}
+============
+Row 
+----------
+
+### Distribución de los porcentajes de Asistencia
+
+En este apartado se exhiben gráficos de frecuencia absoluta de los porcentajes de asistencia a clases de los alumnos de 4to medio desde el año 2017 hasta el año 2021. En otras palabras, a través de gráficos de barras mostramos la cantidad de alumnos para cada posible porcentaje de asistencia. Este indicador es medido como la presencia de cada alumno al establecimiento educacional, y para el período de clases online debido a la pandemia de COVID-19, esta se mide como la conexión vía web a las clases remotas.
+
+
+Row {.tabset data-height=600}
+--------------------
+
+### Porcentajes de Asistencia  2017
+
+
+```{r}
+database %>% filter(Año == 2017) %>%
+  plot_ly(x = ~Asistencia) %>%
+  add_histogram(nbinsx = 30, color = I("#C87ABE")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Porcentaje de Asistencia",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+
+
+```
+
+
+### Porcentajes de Asistencia 2018
+
+```{r}
+database %>% filter(Año == 2018) %>%
+  plot_ly(x = ~Asistencia) %>%
+  add_histogram(nbinsx = 30, color = I("#C87ABE")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Porcentaje de Asistencia",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+
+```
+
+
+### Porcentajes de Asistencia  2019
+
+
+```{r}
+database %>% filter(Año == 2019) %>%
+  plot_ly(x = ~Asistencia) %>%
+  add_histogram(nbinsx = 30, color = I("#C87ABE")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Porcentaje de Asistencia",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+```
+
+
+### Porcentajes de Asistencia  2020
+
+
+```{r}
+database %>% filter(Año == 2020) %>%
+  plot_ly(x = ~Asistencia) %>%
+  add_histogram(nbinsx = 30, color = I("#C87ABE")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Porcentaje de Asistencia",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+
+```
+
+### Porcentajes de Asistencia 2021
+
+
+```{r}
+database %>% filter(Año == 2021) %>%
+  plot_ly(x = ~Asistencia) %>%
+  add_histogram(nbinsx = 30, color = I("#C87ABE")) %>%
+  layout(yaxis = list(title = "Número de Alumnos",
+                      ticklen = 5,
+                      tickcolor = "transparent"), 
+         xaxis = list(title = "Porcentaje de Asistencia",
+                      zeroline = FALSE,
+                      ticklen = 5,
+                      tickcolor = "transparent"),
+         bargap=0.05)
+```
+
+
+Row {data-height=300}
+------
+### Interpretación de la distribución
+
+Observado los distintos gráficos podemos ver que para los años 2017 hasta el 2019 los valores de la variable presentan un comportamiento similar, con una mayor concentración en sus medias y una acumulación de resultados alrededor de esta, cercano a una distribución normal. Por otra parte, es posible observar que para los años 2020 y 2021 la variable presenta una fuerte concentración en el extremo superior, los que nos muestra que durante estos años hubo una mayor cantidad de alumnos con el 100% de asistencia en comparación con los otros años. Junto con esto se puede ver que se mantienen bajos los demás valores menos el 85%, que igualmente presenta una cantidad alta de datos. Cabe mencionar que uno de los requisitos para la aprobación de curso presentar un mínimo de 85% de asistencia.
+
+
+Tablas 
+===========
+Row
+--------
+
+### Interpretación de las Tablas 
+
+**Promedios**
+
+Analizando los datos de Promedios por Establecimientos, podemos concluir que todos los distintos tipos de colegios presentaron un aumento en la media de sus promedios generales, sin embargo, los Colegios Particulares Pagados fueron los que tuvieron un mayor aumento y persistencia en esta variable.
+
+
+**Asistencia**
+
+ 
+Con respecto a este indicador es posible observar que si bien la asistencia promedio aumentó en todos los tipos de establecimientos, este efecto fué de mayor magnitud en los Colegios Particulares Pagados y Municipal DAEM. Es importante mencionar que este efecto persistió para los Colegios Particulares en el año 2021.
+ 
+ 
+### Media de Promedios Generales por Establecimiento
+```{r}
+
+T_Col_1
+```
+
+### Promedio de Asistencia por Establecimiento
+
+
+```{r}
+
+T_Col_2 
+
+```
+
+
+
+Indicadores por Región (2019-2020)
+===========
+Row
+--------
+
+### Interpretación de los Gráficos
+
+**Aspectos generales de ambos indicadores**
+
+
+De los siguientes gráficos, es posible observar que la región que presentó un mayor cambio en la media de los promedios generales por región fué la región de Aysén, mientras que las que tuvieron menor variación fueron regiones del norte.
+Con respecto a la Variación de la asistencia, es posible observar que las regiones con una mayor variación en el promedio de su asistencia entre 2019 y 2020 fuerón las regiones de Aysén y Tarapacá  mientras la que presentó menor variación fue la región de Antofagasta.
+
+**Limitaciones**
+
+
+De los gráficos es difícil obtener relaciones concluyentes con respecto a las variaciones de las medias de promedios y asistencia entre los dos años, sin embargo, de manera visual es posible observar que existe cierta relación entre las regiones que presentaron una variación relativa intermedia en las dos variables. Esto nos lleva a pensar que las regiones más alejadas de la RM y las regiones más cercanas a esta región, fueron las que presentarón mayores variaciones en los resultados académicos. 
+
+Pese a esta dificultad, de igual forma es posible concluir que a nivel nacional todas las regiones tuvieron variaciones al alza tanto de los porcentajes de asistencia, como de la media de los promedios generales.
+
+### Variación de los Promedios Generales 2019-2020 (en décimas de nota)
+
+```{r}
+MAP_p %>%
+  ggplot() + 
+  geom_sf(aes(geometry = geometry,
+              fill = VAR1), col = "#ffffff") + 
+  labs(
+    title = "Variación Promedios por Región ",
+    caption = "Fuente: Elaboración propia en base a datos del MINEDUC" ,
+    fill = "Variacion Promedio (decimas)") +
+  scale_fill_viridis(option = "plasma", direction = -1) +
+  theme_void()
+
+```
+
+### Variación del promedio de Asistencia 2019-2020 (%)
+
+
+```{r}
+MAP_ %>%
+  ggplot() + 
+  geom_sf(aes(geometry = geometry,
+              fill = VAR), col = "#ffffff") + 
+  labs(
+    title = "Variación Asistencia por Región",
+    caption = "Fuente: Elaboración propia en base a datos del MINEDUC" ,
+    fill = "Variacion Asistencia (%)") +
+  scale_fill_viridis(option = "mako", direction = -1) +
+  theme_void()
+
+
+```
+
+
+Conclusión
+===========
+**Conclusión**
+
+En síntesis, luego de un análisis de los datos se puede afirmar que luego de la llegada de la pandemia hubo un aumento tanto de los promedios generales como de la asistencia, pero que la distribucion de estas se vio alterada, dejando de tener la forma de una distribucion normal.
+
+Más detalladamente al ampliar el espectro de estudio, obtenemos resultados que varían en magnitud dependiendo del tipo de establecimiento educacional y región. En cuanto al tipo de establecimiento, los Colegios Particulares Pagados fueron los que presentaron un mayor aumento tanto en asistencia como en sus promedios generales. Con respecto a los efectos encontrados por región es posible observar que la región que presenta una mayor variación en los resultados académicos fue la región de Aysen.
+
+Por último, a través de la estadística descriptiva analizada, es posible concluir que la pandemia no tuvo efectos negativos en los  indicadores de resultados académicos de los alumnos de cuarto medio, de hecho estos mejoraron de manera importante. Sin embargo, creemos que estos resultados no fueron necesariamete debido a una mejora en el aprendizaje de los estudiantes, sino más bien a distorsiones que pudo haber generado la pandemia en la educacion.
+
+Creemos que este dashboard entrega información importante para tener en cuenta al realizar investigaciones académicas, o alguna política pública relacionada a la educación de los alumnos. Dadas las cambiantes condiciones sanitarias puede ser un gran aporte en caso de que vuelvan las cuarentenas generalizadas.
